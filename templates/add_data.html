@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header text-white">
+        Add New Data
+    </div>
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}" class="text-info">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Data</li>
+            </ol>
+        </nav>
+        
+        <p class="mb-3 text-white">Add new information to the knowledge base. This data will be vectorized and stored for future chat interactions.</p>
+        
+        <form method="POST" action="{{ url_for('add_data') }}">
+            <div class="mb-3">
+                <label for="data" class="form-label text-white">Data Content</label>
+                <textarea class="form-control" id="data" name="data" rows="10" required placeholder="Enter the text data you want to add to the knowledge base..."></textarea>
+                <div class="form-text text-light mt-2">This information will be used as context for the AI to provide more accurate and relevant responses.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add to Knowledge Base</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

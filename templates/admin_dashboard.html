@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header text-white">
+        Admin Dashboard
+    </div>
+    <div class="card-body">
+        <h5 class="card-title mb-4 text-white">Welcome to the Admin Dashboard</h5>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">Data Management</h5>
+                        <p class="card-text text-white">Add new data to the knowledge base for the AI to use as context.</p>
+                        <a href="{{ url_for('add_data') }}" class="btn btn-primary">Add Data</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">System Status</h5>
+                        <p class="card-text text-white">Current knowledge base size: <span id="kb-size" class="text-info">{{ text_data|length if text_data else 0 }}</span> entries</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
