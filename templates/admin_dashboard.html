@@ -24,6 +24,26 @@
                     <div class="card-body">
                         <h5 class="card-title text-white">System Status</h5>
                         <p class="card-text text-white">Current knowledge base size: <span id="kb-size" class="text-info">{{ text_data|length if text_data else 0 }}</span> entries</p>
+                        <p class="card-text text-white">Chat sessions: <span class="text-info">{{ total_chat_sessions }}</span> ({{ total_chat_messages }} messages)</p>
+                        <div class="d-flex mt-2">
+                            <a href="{{ url_for('view_chat_history') }}" class="btn btn-sm btn-info me-2">View Chat History</a>
+                            <form action="{{ url_for('clear_database') }}" method="post" onsubmit="return confirm('Are you sure you want to clear the entire vector database? This action cannot be undone.')">
+                                <button type="submit" class="btn btn-sm btn-danger">Clear Database</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">Product Descriptions</h5>
+                        <p class="card-text text-white">Manage your daily product descriptions. Current count: <span class="text-info">{{ product_descriptions|length if product_descriptions else 0 }}</span></p>
+                        <div class="d-flex">
+                            <a href="{{ url_for('add_product') }}" class="btn btn-primary me-2">Add Product</a>
+                            <a href="{{ url_for('product_list') }}" class="btn btn-info">View All</a>
+                        </div>
                     </div>
                 </div>
             </div>

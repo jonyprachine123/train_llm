@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header text-white d-flex justify-content-between align-items-center">
+        <span>Chat History</span>
+        <form method="POST" action="{{ url_for('clear_chat_history') }}" onsubmit="return confirm('Are you sure you want to clear all chat history? This cannot be undone.');">
+            <button type="submit" class="btn btn-sm btn-danger">Clear All History</button>
+        </form>
+    </div>
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}" class="text-info">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Chat History</li>
+            </ol>
+        </nav>
+        
+        {% if chat_memory %}
+            <div class="accordion" id="chatSessionsAccordion">
+                {% for session_id, session_data in chat_memory.items() %}
+                    {% set messages = session_data.messages if session_data is mapping and 'messages' in session_data else session_data %}
+                    <div class="accordion-item bg-dark text-white border-secondary mb-3">
+                        <h2 class="accordion-header" id="heading{{ loop.index }}">
+                            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                                Session {{ loop.index }}: {{ session_id[:8] }}... ({{ messages|length if messages is sequence else 0 }} messages)
+                                {% if messages is sequence and messages|length > 0 and messages[-1] is mapping and 'timestamp' in messages[-1] %}
+                                    <span class="ms-3 text-muted">Last active: {{ messages[-1].timestamp }}</span>
+                                {% endif %}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#chatSessionsAccordion">
+                            <div class="accordion-body">
+                                {% if messages is sequence and messages|length > 0 %}
+                                    <div class="chat-history">
+                                        {% for message in messages %}
+                                            {% if message is mapping and 'user' in message and 'ai' in message %}
+                                                <div class="message-container mb-3">
+                                                    <div class="message user-message">
+                                                        <div class="message-header">
+                                                            <strong>User</strong> 
+                                                            {% if 'timestamp' in message %}
+                                                                <span class="text-muted">{{ message.timestamp }}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="message-content">
+                                                            {{ message.user }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="message ai-message mt-2">
+                                                        <div class="message-header">
+                                                            <strong>AI</strong>
+                                                        </div>
+                                                        <div class="message-content">
+                                                            {{ message.ai }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% if not loop.last %}
+                                                    <hr class="border-secondary">
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted">No messages in this session.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No chat history available.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-history {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .message-container {
+        padding: 10px;
+    }
+    .message {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .user-message {
+        background-color: #2a3746;
+    }
+    .ai-message {
+        background-color: #1e2a3a;
+    }
+    .message-header {
+        margin-bottom: 5px;
+        font-size: 0.9em;
+    }
+    .message-content {
+        white-space: pre-wrap;
+    }
+</style>
+{% endblock %}

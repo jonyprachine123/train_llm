@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header text-white">
+        Add Product Description
+    </div>
+    <div class="card-body">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}" class="text-info">Admin Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('product_list') }}" class="text-info">Product List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+            </ol>
+        </nav>
+        
+        <p class="mb-3 text-white">Add a new product description. This will be saved with today's date and stored for future reference.</p>
+        
+        <form method="POST" action="{{ url_for('add_product') }}">
+            <div class="mb-3">
+                <label for="product_name" class="form-label text-white">Product Name</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" required placeholder="Enter product name...">
+            </div>
+            <div class="mb-3">
+                <label for="product_description" class="form-label text-white">Product Description</label>
+                <textarea class="form-control" id="product_description" name="product_description" rows="10" required placeholder="Enter the product description..."></textarea>
+                <div class="form-text text-light mt-2">This description will be saved with today's date and can be used as context for AI responses.</div>
+            </div>
+            <div class="mb-3">
+                <label for="language" class="form-label text-white">Language</label>
+                <select class="form-select" id="language" name="language">
+                    <option value="english">English</option>
+                    <option value="bangla">Bangla (Bengali)</option>
+                </select>
+                <div class="form-text text-light mt-2">Select the language of your product description.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Product Description</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
